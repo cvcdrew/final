@@ -1,0 +1,474 @@
+section 1.1-prompt 1:
+I need to create a CLI Task manager programme in Python for my programming course. The programme should allow users to add, list, and remove tasks stored in memory.
+Please provide pseudocode that only uses basic Python concepts suitable for our introductory course - no advanced features. Follow a structured planning approach with clear steps
+
+AI Response:
+PSEUDOCODE FOR CLI TASK MANAGER
+
+1.  PROGRAM INITIALIZATION AND DATA LOADING
+    1.1. Define a constant `TASK_FILE_NAME` as "tasks.txt".
+    1.2. Create an empty list called `tasks` to hold all active task descriptions.
+    1.3. CALL `load_tasks_from_file(tasks, TASK_FILE_NAME)` to populate `tasks` list from file.
+
+2.  DEFINE HELPER FUNCTIONS
+
+    2.1. FUNCTION `load_tasks_from_file(tasks_list, filename)`:
+        2.1.1. TRY:
+            2.1.1.1. OPEN `filename` in read mode.
+            2.1.1.2. FOR EACH `line` in the opened file:
+                2.1.1.2.1. REMOVE any leading/trailing whitespace from `line`.
+                2.1.1.2.2. IF `line` is NOT empty:
+                    2.1.1.2.2.1. ADD `line` to `tasks_list`.
+            2.1.1.3. CLOSE the file.
+            2.1.1.4. DISPLAY "Tasks loaded from file."
+        2.1.2. EXCEPT `FileNotFoundError`:
+            2.1.2.1. DISPLAY "No existing tasks file found. Starting with an empty list."
+        2.1.3. EXCEPT any other file reading error:
+            2.1.3.1. DISPLAY "An error occurred while loading tasks."
+
+    2.2. FUNCTION `save_tasks_to_file(tasks_list, filename)`:
+        2.2.1. TRY:
+            2.2.1.1. OPEN `filename` in write mode.
+            2.2.1.2. FOR EACH `task` in `tasks_list`:
+                2.2.1.2.1. WRITE `task` followed by a newline character to the file.
+            2.2.1.3. CLOSE the file.
+            2.2.1.4. DISPLAY "Tasks saved to file."
+        2.2.2. EXCEPT any file writing error:
+            2.2.2.1. DISPLAY "An error occurred while saving tasks."
+
+3.  DEFINE CORE TASK MANAGEMENT FUNCTIONS
+
+    3.1. FUNCTION `add_task(tasks_list)`:
+        3.1.1. DISPLAY "Enter the new task description:"
+        3.1.2. GET user input for `task_description`.
+        3.1.3. REMOVE any leading/trailing whitespace from `task_description`.
+        3.1.4. IF `task_description` is NOT empty:
+            3.1.4.1. ADD `task_description` to the end of `tasks_list`.
+            3.1.4.2. DISPLAY "Task added successfully!"
+        3.1.5. ELSE:
+            3.1.5.1. DISPLAY "Task description cannot be empty."
+
+    3.2. FUNCTION `list_tasks(tasks_list)`:
+        3.2.1. IF `tasks_list` is empty:
+            3.2.1.1. DISPLAY "No tasks to show. Add some tasks first!"
+        3.2.2. ELSE:
+            3.2.2.1. DISPLAY "\n--- Your Current Tasks ---"
+            3.2.2.2. FOR `index` from 0 to `length of tasks_list` - 1:
+                3.2.2.2.1. DISPLAY `index + 1` followed by ". " and `tasks_list[index]`
+            3.2.2.3. DISPLAY "--------------------------"
+
+    3.3. FUNCTION `remove_task(tasks_list)`:
+        3.3.1. CALL `list_tasks(tasks_list)` to display current tasks.
+        3.3.2. IF `tasks_list` is NOT empty:
+            3.3.2.1. DISPLAY "Enter the number of the task to remove (or 0 to cancel):"
+            3.3.2.2. TRY:
+                3.3.2.2.1. GET user input for `task_number_str`.
+                3.3.2.2.2. CONVERT `task_number_str` to an integer `task_index_input`.
+                3.3.2.2.3. IF `task_index_input` is 0:
+                    3.3.2.2.3.1. DISPLAY "Task removal cancelled."
+                3.3.2.2.4. ELSE IF `task_index_input` is greater than 0 AND `task_index_input` is less than or equal to `length of tasks_list`:
+                    3.3.2.2.4.1. CALCULATE actual list index: `actual_index = task_index_input - 1`.
+                    3.3.2.2.4.2. REMOVE item at `actual_index` from `tasks_list`.
+                    3.2.2.2.4.3. DISPLAY "Task removed successfully!"
+                3.2.2.2.5. ELSE:
+                    3.2.2.2.5.1. DISPLAY "Invalid task number. Please enter a number from the list."
+            3.2.2.3. EXCEPT `ValueError` (if input is not a number):
+                3.2.2.3.1. DISPLAY "Invalid input. Please enter a valid number."
+        3.2.3. ELSE:
+            3.2.3.1. DISPLAY "No tasks to remove."
+
+4.  MAIN PROGRAM LOOP
+
+    4.1. DISPLAY "Welcome to the CLI Task Manager!"
+    4.2. START a `while` loop that continues indefinitely (or until the user chooses to exit).
+        4.2.1. DISPLAY "\n--- Menu ---"
+        4.2.2. DISPLAY "1. Add a new task"
+        4.2.3. DISPLAY "2. List all tasks"
+        4.2.4. DISPLAY "3. Remove a task"
+        4.2.5. DISPLAY "4. Exit"
+        4.2.6. DISPLAY "----------------"
+        4.2.7. DISPLAY "Enter your choice (1-4):"
+        4.2.8. GET user input for `choice_str`.
+        4.2.9. TRY:
+            4.2.9.1. CONVERT `choice_str` to an integer `choice`.
+            4.2.9.2. IF `choice` is 1:
+                4.2.9.2.1. CALL `add_task(tasks)`.
+            4.2.9.3. ELSE IF `choice` is 2:
+                4.2.9.3.1. CALL `list_tasks(tasks)`.
+            4.2.9.4. ELSE IF `choice` is 3:
+                4.2.9.4.1. CALL `remove_task(tasks)`.
+            4.2.9.5. ELSE IF `choice` is 4:
+                4.2.9.5.1. CALL `save_tasks_to_file(tasks, TASK_FILE_NAME)`.
+                4.2.9.5.2. DISPLAY "Exiting Task Manager. Goodbye!"
+                4.2.9.5.3. BREAK the `while` loop.
+            4.2.9.6. ELSE:
+                4.2.9.6.1. DISPLAY "Invalid choice. Please enter a number between 1 and 4."
+        4.2.10. EXCEPT `ValueError`:
+            4.2.10.1. DISPLAY "Invalid input. Please enter a number."
+
+Course Reference: “I used the problem-solving methodology from Week 2: Computational Thinking & Building Simple Interfaces”
+
+Section 1.2- Prompt 1
+Please refine the pseudocode to handle Include graceful error handling for file not found, unreadable format, or invalid user input.”
+
+  AI Response:
+REFINED PSEUDOCODE FOR CLI TASK MANAGER
+
+1.  PROGRAM INITIALIZATION AND DATA LOADING
+    1.1. Define a constant `TASK_FILE_NAME` as "tasks.txt".
+    1.2. Create an empty list called `tasks` to hold all active task descriptions.
+    1.3. CALL `load_tasks_from_file(tasks, TASK_FILE_NAME)` to populate `tasks` list from file.
+
+2.  DEFINE HELPER FUNCTIONS
+
+    2.1. FUNCTION `load_tasks_from_file(tasks_list, filename)`:
+        2.1.1. TRY:
+            2.1.1.1. OPEN `filename` in read mode (`"r"`).
+            2.1.1.2. FOR EACH `line_content` in the opened file:
+                2.1.1.2.1. REMOVE any leading/trailing whitespace from `line_content`.
+                2.1.1.2.2. IF `line_content` is NOT an empty string:  // Handles "unreadable format" by skipping empty/whitespace-only lines
+                    2.1.1.2.2.1. ADD `line_content` to `tasks_list`.
+            2.1.1.3. CLOSE the file.
+            2.1.1.4. DISPLAY "Tasks loaded successfully from file."
+        2.1.2. EXCEPT `FileNotFoundError`:
+            2.1.2.1. DISPLAY "No existing tasks file ('tasks.txt') found. Starting with an empty task list." // More graceful message
+        2.1.3. EXCEPT `IOError`: // Catches other potential file system issues (e.g., permission errors)
+            2.1.3.1. DISPLAY "An I/O error occurred while trying to load tasks. Check file permissions or disk."
+        2.1.4. EXCEPT Exception as e: // General catch-all for unexpected errors during file load
+            2.1.4.1. DISPLAY "An unexpected error occurred while loading tasks: " + `e`
+            // NOTE: For basic course level, a generic 'Exception' catch might be reduced to more specific ones if taught.
+
+    2.2. FUNCTION `save_tasks_to_file(tasks_list, filename)`:
+        2.2.1. TRY:
+            2.2.1.1. OPEN `filename` in write mode (`"w"`).
+            2.2.1.2. FOR EACH `task` in `tasks_list`:
+                2.1.1.2.1. WRITE `task` followed by a newline character to the file.
+            2.1.1.3. CLOSE the file.
+            2.1.1.4. DISPLAY "Tasks saved to file."
+        2.2.2. EXCEPT `IOError`: // Catches file system issues during save
+            2.2.2.1. DISPLAY "An I/O error occurred while trying to save tasks. Your changes might not be saved."
+        2.2.3. EXCEPT Exception as e: // General catch-all for unexpected errors during file save
+            2.2.3.1. DISPLAY "An unexpected error occurred while saving tasks: " + `e`
+
+3.  DEFINE CORE TASK MANAGEMENT FUNCTIONS
+
+    3.1. FUNCTION `add_task(tasks_list)`:
+        3.1.1. DISPLAY "Enter the new task description:"
+        3.1.2. GET user input for `task_description`.
+        3.1.3. REMOVE any leading/trailing whitespace from `task_description`.
+        3.1.4. IF `task_description` is NOT an empty string:
+            3.1.4.1. ADD `task_description` to the end of `tasks_list`.
+            3.1.4.2. DISPLAY "Task added successfully!"
+        3.1.5. ELSE:
+            3.1.5.1. DISPLAY "Task description cannot be empty. Please enter a valid task." // Improved message
+
+    3.2. FUNCTION `list_tasks(tasks_list)`:
+        3.2.1. IF `tasks_list` is empty:
+            3.2.1.1. DISPLAY "No tasks to show. Add some tasks first!"
+        3.2.2. ELSE:
+            3.2.2.1. DISPLAY "\n--- Your Current Tasks ---"
+            3.2.2.2. FOR `index` from 0 to `length of tasks_list` - 1:
+                3.2.2.2.1. DISPLAY `index + 1` followed by ". " and `tasks_list[index]`
+            3.2.2.3. DISPLAY "--------------------------"
+
+    3.3. FUNCTION `remove_task(tasks_list)`:
+        3.3.1. CALL `list_tasks(tasks_list)` to display current tasks.
+        3.3.2. IF `tasks_list` is NOT empty:
+            3.3.2.1. DISPLAY "Enter the number of the task to remove (or '0' to cancel):"
+            3.3.2.2. TRY:
+                3.3.2.2.1. GET user input for `task_number_str`.
+                3.3.2.2.2. CONVERT `task_number_str` to an integer `task_index_input`.
+                3.3.2.2.3. IF `task_index_input` is 0:
+                    3.3.2.2.3.1. DISPLAY "Task removal cancelled."
+                3.3.2.2.4. ELSE IF `task_index_input` is greater than 0 AND `task_index_input` is less than or equal to `length of tasks_list`:
+                    3.3.2.2.4.1. CALCULATE actual list index: `actual_index = task_index_input - 1`.
+                    3.3.2.2.4.2. REMOVE item at `actual_index` from `tasks_list`.
+                    3.3.2.2.4.3. DISPLAY "Task removed successfully!"
+                3.3.2.2.5. ELSE:
+                    3.3.2.2.5.1. DISPLAY "Invalid task number. Please enter a number from the list (e.g., 1, 2)." // More specific message
+            3.3.2.3. EXCEPT `ValueError`: // Handles non-integer input gracefully
+                3.3.2.3.1. DISPLAY "Invalid input. Please enter a whole number for the task." // More specific message
+        3.3.3. ELSE:
+            3.3.3.1. DISPLAY "No tasks to remove."
+
+4.  MAIN PROGRAM LOOP
+
+    4.1. DISPLAY "Welcome to the CLI Task Manager!"
+    4.2. START a `while` loop that continues indefinitely (or until the user chooses to exit).
+        4.2.1. DISPLAY "\n--- Menu ---"
+        4.2.2. DISPLAY "1. Add a new task"
+        4.2.3. DISPLAY "2. List all tasks"
+        4.2.4. DISPLAY "3. Remove a task"
+        4.2.5. DISPLAY "4. Exit"
+        4.2.6. DISPLAY "----------------"
+        4.2.7. DISPLAY "Enter your choice (1-4):"
+        4.2.8. GET user input for `choice_str`.
+        4.2.9. TRY:
+            4.2.9.1. CONVERT `choice_str` to an integer `choice`.
+            4.2.9.2. IF `choice` is 1:
+                4.2.9.2.1. CALL `add_task(tasks)`.
+            4.2.9.3. ELSE IF `choice` is 2:
+                4.2.9.3.1. CALL `list_tasks(tasks)`.
+            4.2.9.4. ELSE IF `choice` is 3:
+                4.2.9.4.1. CALL `remove_task(tasks)`.
+            4.2.9.5. ELSE IF `choice` is 4:
+                4.2.9.5.1. CALL `save_tasks_to_file(tasks, TASK_FILE_NAME)`.
+                4.2.9.5.2. DISPLAY "Exiting Task Manager. Goodbye!"
+                4.2.9.5.3. BREAK the `while` loop.
+            4.2.9.6. ELSE:
+                4.2.9.6.1. DISPLAY "Invalid choice. Please enter a number between 1 and 4." // More specific message
+        4.2.10. EXCEPT `ValueError`: // Handles non-integer input gracefully
+            4.2.10.1. DISPLAY "Invalid input. Please enter a valid menu number (1-4)." // More specific message
+  
+  Course Reference: “This refinement applied basic file operations and error handling concepts from Week 7: Object-Oriented Programming Fundamentals & File Operations”
+
+Section 1.2-Prompt 2
+  further enhance the Pseudocode to Add a persistent, looped main menu that allows users to choose from options like Add Task, View Tasks, Complete Task, Delete Task, View Statistics, Save & Exit.
+
+  AI Response:
+  REFINED PSEUDOCODE FOR CLI TASK MANAGER
+
+1.  PROGRAM INITIALIZATION AND DATA LOADING
+    1.1. Define a constant `TASK_FILE_NAME` as "tasks.txt".
+    1.2. Create an empty list called `tasks` to hold all active task descriptions.
+    1.3. CALL `load_tasks_from_file(tasks, TASK_FILE_NAME)` to populate `tasks` list from file.
+
+2.  DEFINE HELPER FUNCTIONS
+
+    2.1.  FUNCTION `load_tasks_from_file(tasks_list, filename)`:  // Same as before (error handling for file load)
+        2.1.1. TRY:
+            2.1.1.1. OPEN `filename` in read mode (`"r"`).
+            2.1.1.2. FOR EACH `line_content` in the opened file:
+                2.1.1.2.1. REMOVE any leading/trailing whitespace from `line_content`.
+                2.1.1.2.2. IF `line_content` is NOT an empty string:
+                    2.1.1.2.2.1. ADD `line_content` to `tasks_list`.
+            2.1.1.3. CLOSE the file.
+            2.1.1.4. DISPLAY "Tasks loaded successfully from file."
+        2.1.2. EXCEPT `FileNotFoundError`:
+            2.1.2.1. DISPLAY "No existing tasks file ('tasks.txt') found. Starting with an empty task list."
+        2.1.3. EXCEPT `IOError`:
+            2.1.3.1. DISPLAY "An I/O error occurred while trying to load tasks. Check file permissions or disk."
+        2.1.4. EXCEPT Exception as e:
+            2.1.4.1. DISPLAY "An unexpected error occurred while loading tasks: " + `e`
+
+    2.2. FUNCTION `save_tasks_to_file(tasks_list, filename)`:  // Same as before (error handling for file save)
+        2.2.1. TRY:
+            2.2.1.1. OPEN `filename` in write mode (`"w"`).
+            2.2.1.2. FOR EACH `task` in `tasks_list`:
+                2.2.1.2.1. WRITE `task` followed by a newline character to the file.
+            2.2.1.3. CLOSE the file.
+            2.2.1.4. DISPLAY "Tasks saved to file."
+        2.2.2. EXCEPT `IOError`:
+            2.2.2.1. DISPLAY "An I/O error occurred while trying to save tasks. Your changes might not be saved."
+        2.2.3. EXCEPT Exception as e:
+            2.2.3.1. DISPLAY "An unexpected error occurred while saving tasks: " + `e`
+
+    2.3. FUNCTION `display_task(task_description, is_complete)`:
+    2.3.1.  IF `is_complete` is TRUE:
+        2.3.1.1. DISPLAY "[X] " + `task_description`
+    2.3.2.  ELSE:
+        2.3.2.1. DISPLAY "[ ] " + `task_description`
+
+3.  DEFINE CORE TASK MANAGEMENT FUNCTIONS
+
+    3.1. FUNCTION `add_task(tasks_list)`:  // Same as before
+        3.1.1. DISPLAY "Enter the new task description:"
+        3.1.2. GET user input for `task_description`.
+        3.1.3. REMOVE any leading/trailing whitespace from `task_description`.
+        3.1.4. IF `task_description` is NOT an empty string:
+            3.1.4.1. ADD `task_description` to the end of `tasks_list`.
+            3.1.4.2. DISPLAY "Task added successfully!"
+        3.1.5. ELSE:
+            3.1.5.1. DISPLAY "Task description cannot be empty. Please enter a valid task."
+
+    3.2. FUNCTION `list_tasks(tasks_list)`:  // Modified to show completion status
+        3.2.1. IF `tasks_list` is empty:
+            3.2.1.1. DISPLAY "No tasks to show. Add some tasks first!"
+        3.2.2. ELSE:
+            3.2.2.1. DISPLAY "\n--- Your Current Tasks ---"
+            3.2.2.2. FOR `index` from 0 to `length of tasks_list` - 1:
+                3.2.2.2.1.  CALL `display_task(tasks_list[index]["description"], tasks_list[index]["complete"])`
+            3.2.2.3. DISPLAY "--------------------------"
+
+    3.3. FUNCTION `remove_task(tasks_list)`:  // Modified to work with list of dictionaries
+        3.3.1. CALL `list_tasks(tasks_list)`.
+        3.3.2. IF `tasks_list` is NOT empty:
+            3.3.2.1. DISPLAY "Enter the number of the task to remove (or '0' to cancel):"
+            3.3.2.2. TRY:
+                3.3.2.2.1. GET user input for `task_number_str`.
+                3.3.2.2.2. CONVERT `task_number_str` to an integer `task_index_input`.
+                3.3.2.2.3. IF `task_index_input` is 0:
+                    3.3.2.2.3.1. DISPLAY "Task removal cancelled."
+                3.3.2.2.4. ELSE IF `task_index_input` is greater than 0 AND `task_index_input` is less than or equal to `length of tasks_list`:
+                    3.3.2.2.4.1. CALCULATE actual list index: `actual_index = task_index_input - 1`.
+                    3.3.2.2.4.2. REMOVE item at `actual_index` from `tasks_list`.
+                    3.3.2.2.4.3. DISPLAY "Task removed successfully!"
+                3.3.2.2.5. ELSE:
+                    3.3.2.2.5.1. DISPLAY "Invalid task number. Please enter a number from the list (e.g., 1, 2)."
+            3.3.2.3. EXCEPT `ValueError`:
+                3.3.2.3.1. DISPLAY "Invalid input. Please enter a whole number for the task."
+        3.3.3. ELSE:
+            3.3.3.1. DISPLAY "No tasks to remove."
+
+    3.4. FUNCTION `complete_task(tasks_list)`:
+    3.4.1.  CALL `list_tasks(tasks_list)`.
+    3.4.2.  IF `tasks_list` is NOT empty:
+        3.4.2.1.  DISPLAY "Enter the number of the task to mark as complete (or '0' to cancel):"
+        3.4.2.2.  TRY:
+            3.4.2.2.1. GET user input for `task_number_str`.
+            3.4.2.2.2. CONVERT `task_number_str` to an integer `task_index_input`.
+            3.4.2.2.3. IF `task_index_input` is 0:
+                3.4.2.2.3.1. DISPLAY "Task completion cancelled."
+            3.4.2.2.4. ELSE IF `task_index_input` is greater than 0 AND `task_index_input` is less than or equal to `length of tasks_list`:
+                3.4.2.2.4.1. CALCULATE actual list index: `actual_index = task_index_input - 1`.
+                3.4.2.2.4.2. SET `tasks_list[actual_index]["complete"]` to TRUE.
+                3.4.2.2.4.3. DISPLAY "Task marked as complete."
+            3.4.2.2.5. ELSE:
+                3.4.2.2.5.1. DISPLAY "Invalid task number."
+        3.4.2.3.  EXCEPT `ValueError`:
+            3.4.2.3.1. DISPLAY "Invalid input. Please enter a number."
+    3.4.3.  ELSE:
+        3.4.3.1.  DISPLAY "No tasks to complete."
+
+    3.5. FUNCTION `view_statistics(tasks_list)`:
+    3.5.1.  SET `total_tasks` to `length of tasks_list`.
+    3.5.2.  SET `completed_tasks` to 0.
+    3.5.3.  FOR each `task` in `tasks_list`:
+        3.5.3.1. IF `task["complete"]` is TRUE:
+            3.5.3.1.1. INCREMENT `completed_tasks`.
+    3.5.4.  DISPLAY "--- Task Statistics ---"
+    3.5.5.  DISPLAY "Total tasks: " + `total_tasks`.
+    3.5.6.  DISPLAY "Completed tasks: " + `completed_tasks`.
+    3.5.7.  IF `total_tasks` > 0:
+        3.5.7.1. CALCULATE `completion_percentage` as (`completed_tasks` / `total_tasks`) * 100
+        3.5.7.2. DISPLAY "Completion percentage: " + `completion_percentage` + "%"
+    3.5.8.  ELSE:
+        3.5.8.1. DISPLAY "No tasks to show statistics."
+
+4.  MAIN PROGRAM LOOP
+
+    4.1. DISPLAY "Welcome to the CLI Task Manager!"
+    4.2. DECLARE `tasks` as an empty list of dictionaries.  // Each task is a dictionary
+    4.3. `tasks` = `load_tasks_from_file(TASK_FILE_NAME)` // Load tasks, overwriting the empty list
+
+    4.4. START a `while` loop that continues indefinitely (until the user chooses to exit).
+        4.4.1. DISPLAY "\n--- Menu ---"
+        4.4.2. DISPLAY "1. Add a new task"
+        4.4.3. DISPLAY "2. List all tasks"
+        4.4.4. DISPLAY "3. Remove a task"
+        4.4.5. DISPLAY "4. Complete a task"
+        4.4.6. DISPLAY "5. View statistics"
+        4.4.7. DISPLAY "6. Save & Exit"
+        4.4.8. DISPLAY "----------------"
+        4.4.9. DISPLAY "Enter your choice (1-6):"
+        4.4.10.    GET user input for `choice_str`.
+        4.4.11.    TRY:
+            4.4.11.1.   CONVERT `choice_str` to an integer `choice`.
+            4.4.11.2.   IF `choice` is 1:
+                4.4.11.2.1.  CALL `add_task(tasks)`.
+            4.4.11.3.   ELSE IF `choice` is 2:
+                4.4.11.3.1.  CALL `list_tasks(tasks)`.
+            4.4.11.4.   ELSE IF `choice` is 3:
+                4.4.11.4.1.  CALL `remove_task(tasks)`.
+            4.4.11.5.   ELSE IF `choice` is 4:
+                4.4.11.5.1.  CALL `complete_task(tasks)`.
+            4.4.11.6.   ELSE IF `choice` is 5:
+                4.4.11.6.1.  CALL `view_statistics(tasks)`.
+            4.4.11.7.   ELSE IF `choice` is 6:
+                4.4.11.7.1.  CALL `save_tasks_to_file(tasks, TASK_FILE_NAME)`.
+                 4.4.11.7.2. DISPLAY "Tasks saved. Exiting Task Manager. Goodbye!"
+                4.4.11.7.3. BREAK the `while` loop.
+            4.4.11.8.   ELSE:
+                4.4.11.8.1.  DISPLAY "Invalid choice. Please enter a number between 1 and 6."
+        4.4.12.    EXCEPT `ValueError`:
+            4.4.12.1.   DISPLAY "Invalid input. Please enter a valid menu number (1-6)."
+
+  Course Reference: “This refinement applied text-based menu design concepts from Week 2: Computational Thinking & Building Simple Interfaces”
+
+
+
+section 2.1-prompt 1
+scan my code for any logical or structural errors
+
+AI Response
+
+My Error Observations
+After a quick scan of your broken_task_manager.py code, I found a few errors that would prevent it from running correctly. I used a systematic debugging approach, much like what we covered in Week 6 on debugging strategies, by carefully reading through each line and tracing the variable names and function calls.
+
+Here's what I found:
+
+Error 1: Typo in remove_task function.
+Location: Line 7, if index < len(tas):
+Issue: The variable name tas is misspelled; it should be tasks. This would cause a NameError when the remove_task function is called.
+Error 2: Wrong variable name in list_tasks function.
+Location: Line 16, for i, t in enumerate(task):
+Issue: The variable name task is misspelled; it should be tasks. This would also lead to a NameError when list_tasks tries to iterate.
+Error 3: Wrong function name in main function.
+Location: Line 24, list_task()
+Issue: The function list_tasks is misspelled as list_task. This would result in a NameError because list_task isn't defined.
+
+Course Reference: “I applied the debugging approach from Week 1: Introduction to AI-First Python & Python Fundamentals - identifying and fixing basic errors”
+
+section 2.2-prompt 2
+Please provide the corrected version of this code using only basic Python techniques . Include simple error fixes and make sure the conversation history works properly
+
+AI Response
+
+tasks = []
+
+def add_task(task):
+    tasks.append(task)
+    print(f"Added: {task}")
+
+def remove_task(index):
+    if index < len(tasks):  # ✅ Fixed Error 1: Changed 'tas' to 'tasks'
+        removed = tasks[index]
+        del tasks[index]
+        print(f"Removed: {removed}")
+    else:
+        print("Invalid index!")
+
+def list_tasks():
+    if not tasks:
+        print("No tasks available.")
+    else:
+        for i, t in enumerate(tasks):  # ✅ Fixed Error 2: Changed 'task' to 'tasks'
+            print(f"{i+1}: {t}")
+
+def main():
+    add_task("Buy milk")
+    add_task("Pay bills")
+    add_task("Walk dog")
+    list_tasks()
+    remove_task(1)
+    list_tasks()  # ✅ Fixed Error 3: Changed 'list_task()' to 'list_tasks()'
+
+if __name__ == "__main__":
+    main()
+
+Course References: - “My error handling approach comes from Week 1: Introduction to AI-First Python & Python Fundamentals - identifying and fixing basic errors”
+Course References: - “My testing approach comes from Week 12: testing and debugging- introduction to testing in AI era"
+
+
+  section 3.1- Prompt 1
+
+My AI Prompt: Review this function using only error handling techniques taught in an introductory programming course (basic try/except only)
+
+AI Response:
+
+Okay, let's review the safe_weather_data_fetch() function focusing only on the error handling techniques taught in an introductory programming course, specifically using basic try/except blocks.
+
+Here are three problems with the safe_weather_data_fetch() function's error handling, explained in terms of basic try/except principles:
+
+The "Catch-All" except Block is Too Broad:
+
+Problem: The function uses a simple except: without specifying what kind of error it's trying to catch. In an introductory course, while we learn the basic syntax of try and except, we also quickly learn that catching any error like this is problematic.
+Why it's an issue (basic terms): This except block will silently catch any problem that occurs inside the try block – whether it's a network issue, the website sending back something unexpected, or even a typo in your code. It then just returns the generic "Error occurred" message. This makes it very hard to figure out why the error happened, as you get no specific clue about the actual problem (e.g., "internet disconnected" vs. "website sent bad data"). Even with basic try/except, the goal is usually to provide some meaningful feedback.
+Hiding Specific Data Access Errors (e.g., Missing Information):
+
+Problem: Inside the try block, the code directly tries to access specific pieces of information from the data (like data['current_condition'][0]['temp_C']). If the API response doesn't contain these exact keys or indices, Python would normally raise a KeyError (for missing dictionary keys) or an IndexError (for trying to access a list item that doesn't exist).
+Why it's an issue (basic terms): Because of the "catch-all" except, these specific and common errors are also hidden. Instead of telling you, "Hey, the 'temperature' data wasn't found in the response!", it just gives the vague "Error occurred." Even in a basic course, we learn about these specific error types, and it's better practice to at least be aware that they could happen and to provide a slightly more descriptive message if they do.
+No Distinction Between Connection Problems and Data Problems:
+
+Problem: The requests.get(url) call (which handles connecting to the website) and the subsequent response.json() call (which handles parsing the data) are both within the same try block and caught by the same generic except.
+Why it's an issue (basic terms): This means the function can't tell the difference between "I couldn't even connect to the weather service" and "I connected, but the weather data I received was in a format I couldn't understand." A basic approach to error handling would encourage thinking about these different stages of potential failure to give more helpful feedback to the user about what went wrong.
